@@ -2,7 +2,7 @@
   "name": "agri-x",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://farmwiseai.github.io/agri-x",
+  "homepage": "https://farmwiseai.github.io/agri-x",
   "dependencies": {
     "antd": "^3.25.1",
     "apexcharts": "^3.10.1",
