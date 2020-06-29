@@ -1,0 +1,1 @@
+export const loginAPI = '/server/api/user/login';

@@ -1,0 +1,49 @@
+.filter-checkbox .ant-checkbox-group-item:nth-child(1) .ant-checkbox-inner {
+    background-color: #87d068;
+    border-color: #87d068;
+}
+.filter-checkbox .ant-checkbox-group-item:nth-child(2) .ant-checkbox-inner {
+    background-color: #fada5e;
+    border-color: #fada5e;
+}
+.filter-checkbox .ant-checkbox-group-item:nth-child(3) .ant-checkbox-inner {
+    background-color: #ff6347;
+    border-color: #ff6347;
+}
+.filter-checkbox .ant-checkbox-group-item:nth-child(4) .ant-checkbox-inner {
+    background-color: #d3d3d3;
+    border-color: #d3d3d3;
+}
+
+.ant-result-icon {
+    display: inline;
+    margin-right: 1rem;
+}
+
+.ant-result-title {
+    display: inline;
+    position: relative;
+    top: -16px;
+}
+
+#custom-seekbar {
+    cursor: pointer;
+    height: 10px;
+    margin: 11px;
+    background-color: #f5f5f5;
+    border-radius: 100px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+#custom-seekbar span {
+    background-color: #1890ff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 10px;
+    width: 0px;
+    border-radius: 100px;
+    -webkit-transition: all 0.4s cubic-bezier(0.08, 0.82, 0.17, 1) 0s;
+    transition: all 0.4s cubic-bezier(0.08, 0.82, 0.17, 1) 0s;
+}

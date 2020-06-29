@@ -1,0 +1,11 @@
+.zoom{
+    position: absolute;
+    bottom: 15%;
+    right: 4%;
+    display: flex;
+    flex-direction: column; 
+    & button {
+        height: 32px !important;
+        width: 32px !important;
+    }
+}

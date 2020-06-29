@@ -1,0 +1,48 @@
+{
+  "name": "agri-x",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://manoaravindhan.github.io/agri",
+  "dependencies": {
+    "antd": "^3.25.1",
+    "apexcharts": "^3.10.1",
+    "axios": "^0.19.0",
+    "babel-plugin-import": "^1.12.2",
+    "customize-cra": "^0.8.0",
+    "gh-pages": "^2.1.1",
+    "node-sass": "^4.13.0",
+    "ol": "^6.1.1",
+    "ol-popup": "^4.0.0",
+    "proj4": "^2.5.0",
+    "react": "^16.11.0",
+    "react-app-rewired": "^2.1.5",
+    "react-dom": "^16.11.0",
+    "react-highlight-words": "^0.16.0",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.2.0",
+    "react-window-dimensions": "^1.0.2"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
