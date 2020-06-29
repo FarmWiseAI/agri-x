@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "854986ac8a49f8be832c4bb1f6ff3828",
+    "revision": "8cb880d17b9c20b34ec0a68ea1112993",
     "url": "/agri-x/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/agri-x/static/css/2.72f1c2a3.chunk.css"
   },
   {
-    "revision": "7aad255f9add6197a5be",
+    "revision": "fc3f8ad7ae6155928c01",
     "url": "/agri-x/static/css/main.ba3e35c2.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/agri-x/static/js/2.3c399382.chunk.js"
   },
   {
-    "revision": "7aad255f9add6197a5be",
-    "url": "/agri-x/static/js/main.8673b829.chunk.js"
+    "revision": "fc3f8ad7ae6155928c01",
+    "url": "/agri-x/static/js/main.cd027e38.chunk.js"
   },
   {
     "revision": "cc77e0297d6b63c56bbb",
