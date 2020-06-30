@@ -467,7 +467,7 @@ const MapControls = ({ editAction, submit, clearDraw, handleSubmit, draw }) => {
           </Row>
           <Row>
             <Col span={3}></Col>
-            <Col span={18}>
+            <Col span={12}>
               <div id='pie'></div>
             </Col>
           </Row>
@@ -479,7 +479,7 @@ const MapControls = ({ editAction, submit, clearDraw, handleSubmit, draw }) => {
           </Row>
           <Row>
             <Col span={3}></Col>
-            <Col span={18}>
+            <Col span={12}>
               <div id="chart"></div>
             </Col>
           </Row>

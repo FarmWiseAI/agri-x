@@ -54,7 +54,7 @@ const styleBorder = feature => {
   const { yield: y } = feature.values_;
   switch (y) {
     case 'Crop standing for full season':
-      return generateStyle('#000', 'rgba(255, 255, 0, 0.3)', feature.values_.BLKNAME, '#000');
+      return generateStyle('#000', 'rgb(135, 208, 104, 0.3)', feature.values_.BLKNAME, '#000');
     case 'Crops failed end-season':
       return generateStyle('#000', 'rgba(250, 218, 94, 0.3)', feature.values_.BLKNAME, '#000');
     case 'Crops failed mid-season':
@@ -65,6 +65,11 @@ const styleBorder = feature => {
       return generateStyle('#000', 'rgba(255, 255, 0, 0)', feature.values_.BLKNAME, '#000');
   }
 }
+
+const normaliseBorder = feature => {
+    return generateStyle('#000', 'rgba(255, 255, 0, 0)', feature.values_.BLKNAME, '#000');
+}
+
 let popup;
 
 const marks = {
@@ -156,7 +161,12 @@ class Map extends Component {
       style: f => styleBorder(f)
     });
     this.boundaryLayer.setZIndex(2);
-
+    let borderSource = new VectorSource();
+    this.borderLayer = new VectorLayer({
+      source: borderSource,
+      style: f => normaliseBorder(f)
+    });
+    this.borderLayer.setZIndex(0);
     this.geoTiff = new TileLayer({
       source: new TileWMS({
         url: 'http://13.93.35.162:8080/geoserver/agrix/wms',
@@ -191,7 +201,8 @@ class Map extends Component {
         raster,
         this.boundaryLayer,
         this.geoTiff,
-        this.ndvi
+        this.ndvi,
+        this.borderLayer,
       ],
       controls: [
         new Zoom({
@@ -223,6 +234,7 @@ class Map extends Component {
         })).readFeatures(border())
       });
       this.olmap.getLayers().array_[1].setSource(boundarySource);
+      this.olmap.getLayers().array_[4].setSource(boundarySource);
 
       this.olmap.addInteraction(this.select);
       setTimeout(() => {
@@ -367,6 +379,9 @@ class Map extends Component {
     clearInterval(this.runner);
     this.setState({ time, timeline: 'pause' });
   }
+  formatter = value => {
+    return marks[value].label;
+  }
   genExtra = layer => (
     <Icon
       type={this.state.visibleLayer.indexOf(layer) !== -1 ? 'eye' : 'eye-invisible'}
@@ -401,7 +416,7 @@ class Map extends Component {
         {this.state && this.state.visibleLayer && <Card style={{ position: 'absolute', width: '26%', zIndex: 1, top: 70, right: 20 }}>
           <TypographyText strong>Legends</TypographyText><br />
           <Collapse defaultActiveKey={['1']} accordion>
-            <Panel header="Crop Yield" key="1" extra={this.genExtra('yield')}>
+            <Panel header="Crop Profile" key="1" extra={this.genExtra('yield')}>
               <CheckboxGroup
                 className='filter-checkbox'
                 style={{ float: 'right', paddingLeft: '30px' }}
@@ -410,7 +425,7 @@ class Map extends Component {
                 onChange={this.onChange}
               />
             </Panel>
-            <Panel header="Crop Profile" key="2" extra={this.genExtra('profile')}>
+            <Panel header="Rice Map - Probability" key="2" extra={this.genExtra('profile')}>
               <Badge color='blue' text={'90% and above'} /><br />
               <Badge color='green' text={'50% to 90%'} /><br />
               <Badge color='red' text={'below 50%'} />
@@ -430,14 +445,17 @@ class Map extends Component {
           clearDraw={this.clearDraw}
           handleSubmit={this.handleSubmit}
           submit={this.state.showSubmit} draw={true} />}
-        {this.state && this.state.timeline && <div style={{ position: 'fixed', bottom: 0, height: 50, backgroundColor: `rgba(0, 0, 0, 0.2)`, width: '100%', paddingTop: 5, display:'flex' }}>
-          <div className='filter-checkbox'>
-            <Button shape="circle" onClick={this.play}>
-              {this.state.timeline === 'pause' ? <Icon type="play-circle" theme="filled" /> : <Icon type="pause" />}
-            </Button>
+        {this.state && this.state.timeline && <>
+          <div style={{ height: 3, backgroundImage: `linear-gradient(to right, #A33582, #17468B)`, position: 'fixed', bottom: 50, width:'100%' }}></div>
+          <div style={{ position: 'fixed', bottom: 0, height: 50, backgroundColor: `white`, width: '100%', paddingTop: 5, display: 'flex' }}>
+            <div className='filter-checkbox'>
+              <Button shape="circle" onClick={this.play}>
+                {this.state.timeline === 'pause' ? <Icon type="play-circle" theme="filled" /> : <Icon type="pause" />}
+              </Button>
+            </div>
+            <Slider marks={marks} step={10} style={{ marginLeft: 20, width: '90%' }} value={this.state.time} onChange={this.onChangeSlider} tipFormatter={this.formatter} />
           </div>
-          <Slider marks={marks} step={10} style={{ marginLeft: 20, width: '90%' }} value={this.state.time} onChange={this.onChangeSlider} />
-        </div>}
+        </>}
       </>
     )
   }
