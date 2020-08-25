@@ -36,10 +36,10 @@ const center = [0, 0];
 
 const plainOptions = ['Crop standing for full season', 'Crops failed end-season', 'Crops failed mid-season', 'Crops failed in 30 days'];
 
-const generateStyle = (strokeClr, fillClr, text, txtFillClr) => new Style({
+const generateStyle = (strokeClr, fillClr, text, txtFillClr, flag) => new Style({
   stroke: new Stroke({
     color: strokeClr,
-    width: 1
+    width: flag ? 2 : 1
   }),
   fill: new Fill({
     color: fillClr
@@ -51,6 +51,10 @@ const generateStyle = (strokeClr, fillClr, text, txtFillClr) => new Style({
     })
   })
 });
+
+const styleFarm = feature => {
+  return generateStyle('#39FF14', 'rgba(255, 255, 0, 0)', feature.values_.BLKNAME, '#000', true);
+}
 
 const styleBorder = feature => {
   const { yield: y } = feature.values_;
@@ -165,7 +169,7 @@ class Map extends Component {
     let farmSource = new VectorSource();
     this.farmLayer = new VectorLayer({
       source: farmSource,
-      style: f => styleBorder(f)
+      style: f => styleFarm(f)
     });
     this.boundaryLayer.setZIndex(2);
     this.farmLayer.setZIndex(10);
@@ -248,9 +252,9 @@ class Map extends Component {
       this.olmap.addInteraction(this.select);
       setTimeout(() => {
         this.olmap.getView().fit([8823982.406776493, 1150810.877901873, 8879364.36451017, 1233892.0199781533], { duration: 2000 });
-        popup = new Popup();
-        this.olmap.addOverlay(popup);
-        this.showPop();
+        // popup = new Popup();
+        // this.olmap.addOverlay(popup);
+        // this.showPop();
         hide();
       }, 1000);
       this.select.on('select', e => {
