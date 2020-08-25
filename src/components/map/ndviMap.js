@@ -62,7 +62,7 @@ class Map extends Component {
 
     this.geoTiff = new TileLayer({
       source: new TileWMS({
-        url: 'http://13.93.35.162:8080/geoserver/agrix/wms',
+        url: 'http://104.45.196.98:8080/geoserver/agrix/wms',
         params: { 'LAYERS': `agrix:ndvi1`, 'TILED': true },
         transition: 0
       })

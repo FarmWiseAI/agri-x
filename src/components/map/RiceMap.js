@@ -21,10 +21,12 @@ import './styles/map.scss';
 import MapControl from './MapControls';
 import 'ol/ol.css';
 import './Map.css';
-import { message, Checkbox, Card, Typography, Button, Icon, Collapse, Badge, Progress, Slider, } from 'antd';
+import { message, Checkbox, Card, Typography, Button, Icon, Collapse, Badge, Progress, Slider } from 'antd';
 import { border } from './utils/filter';
 import cloneDeep from 'lodash/cloneDeep';
 import Popup from 'ol-popup';
+import Adangal from './static/ADANGAL.xlsx';
+import { getVillage } from './utils/filter';
 
 const { Text: TypographyText } = Typography;
 const CheckboxGroup = Checkbox.Group;
@@ -67,7 +69,7 @@ const styleBorder = feature => {
 }
 
 const normaliseBorder = feature => {
-    return generateStyle('#000', 'rgba(255, 255, 0, 0)', feature.values_.BLKNAME, '#000');
+  return generateStyle('#000', 'rgba(255, 255, 0, 0)', feature.values_.BLKNAME, '#000');
 }
 
 let popup;
@@ -160,7 +162,13 @@ class Map extends Component {
       source: boundarySource,
       style: f => styleBorder(f)
     });
+    let farmSource = new VectorSource();
+    this.farmLayer = new VectorLayer({
+      source: farmSource,
+      style: f => styleBorder(f)
+    });
     this.boundaryLayer.setZIndex(2);
+    this.farmLayer.setZIndex(10);
     let borderSource = new VectorSource();
     this.borderLayer = new VectorLayer({
       source: borderSource,
@@ -169,7 +177,7 @@ class Map extends Component {
     this.borderLayer.setZIndex(0);
     this.geoTiff = new TileLayer({
       source: new TileWMS({
-        url: 'http://13.93.35.162:8080/geoserver/agrix/wms',
+        url: 'http://104.45.196.98:8080/geoserver/agrix/wms',
         params: { 'LAYERS': 'agrix:ricemap', 'TILED': true },
         transition: 0
       })
@@ -178,7 +186,7 @@ class Map extends Component {
 
     this.ndvi = new TileLayer({
       source: new TileWMS({
-        url: 'http://13.93.35.162:8080/geoserver/agrix/wms',
+        url: 'http://104.45.196.98:8080/geoserver/agrix/wms',
         params: { 'LAYERS': `agrix:ndvi1`, 'TILED': true },
         transition: 0
       })
@@ -203,6 +211,7 @@ class Map extends Component {
         this.geoTiff,
         this.ndvi,
         this.borderLayer,
+        this.farmLayer
       ],
       controls: [
         new Zoom({
@@ -382,6 +391,19 @@ class Map extends Component {
   formatter = value => {
     return marks[value].label;
   }
+  loadFarm = () => {
+    var me = this;
+    let boundarySource = new VectorSource({
+      features: (new GeoJSON({
+        dataProjection: 'EPSG:4326',
+        featureProjection: 'EPSG:3857'
+      })).readFeatures(getVillage())
+    });
+    this.olmap.getLayers().array_[5].setSource(boundarySource);
+    setTimeout(() => {
+      this.olmap.getView().fit([8853369.015319364, 1213466.50803189, 8855557.85221965, 1215813.4702719152], { duration: 2000 });
+    }, 500);
+  }
   genExtra = layer => (
     <Icon
       type={this.state.visibleLayer.indexOf(layer) !== -1 ? 'eye' : 'eye-invisible'}
@@ -409,6 +431,7 @@ class Map extends Component {
       }}
     />
   );
+
   render() {
     this.updateMap();
     return (
@@ -438,6 +461,14 @@ class Map extends Component {
               </div>
             </Panel>
           </Collapse>
+          <div style={{ marginTop: 20 }}>
+            <Button type="primary" onClick={this.loadFarm} style={{ marginRight: 20 }}>
+              Load Farm
+        </Button>
+            <Button type="primary" href={Adangal} target="_blank">
+              Download Adangal
+        </Button>
+          </div>
         </Card>}
         <div id="draw-map" style={{ width: "100%", height: `${this.props.height - 67}px` }}></div>
         {this.props.logged && <MapControl
@@ -446,7 +477,7 @@ class Map extends Component {
           handleSubmit={this.handleSubmit}
           submit={this.state.showSubmit} draw={true} />}
         {this.state && this.state.timeline && <>
-          <div style={{ height: 3, backgroundImage: `linear-gradient(to right, #A33582, #17468B)`, position: 'fixed', bottom: 50, width:'100%' }}></div>
+          <div style={{ height: 3, backgroundImage: `linear-gradient(to right, #A33582, #17468B)`, position: 'fixed', bottom: 50, width: '100%' }}></div>
           <div style={{ position: 'fixed', bottom: 0, height: 50, backgroundColor: `white`, width: '100%', paddingTop: 5, display: 'flex' }}>
             <div className='filter-checkbox'>
               <Button shape="circle" onClick={this.play}>

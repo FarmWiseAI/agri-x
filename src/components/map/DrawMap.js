@@ -18,6 +18,8 @@ import './styles/map.scss';
 import MapControl from './MapControls';
 import 'ol/ol.css';
 import { message } from 'antd';
+import { getKodavasal, getVillage } from './utils/filter';
+
 import './Map.css';
 
 const center = [0, 0];
@@ -121,6 +123,28 @@ const Map = ({height,width,logged}) => {
         }, 500);
         hide();
       }, res => { if (level.current === 0) hide(); });
+    } else if (current === 1) {
+      let boundarySource = new VectorSource({
+        features: (new GeoJSON({
+          dataProjection: 'EPSG:4326',
+          featureProjection: 'EPSG:3857'
+        })).readFeatures(getKodavasal())
+      });
+      olmap.getLayers().array_[4].setSource(boundarySource);
+      level.current = 2;
+    } else if (current === 2) {
+      let boundarySource = new VectorSource({
+        features: (new GeoJSON({
+          dataProjection: 'EPSG:4326',
+          featureProjection: 'EPSG:3857'
+        })).readFeatures(getVillage())
+      });
+      olmap.getLayers().array_[5].setSource(boundarySource);
+      setTimeout(() => {
+        if (level.current === 2) {
+          fitToExtent(source.getFeatures().getArray()[0])
+        }
+      }, 500);
     }
   }
 
@@ -142,6 +166,12 @@ const Map = ({height,width,logged}) => {
     const level1Source = new VectorSource();
     const level1Layer = new VectorLayer({ source: level1Source, style: f => styleDt(f) });
   
+    const level2Source = new VectorSource();
+    const level2Layer = new VectorLayer({ source: level2Source, style: f => styleDt(f) });
+
+    const level3Source = new VectorSource();
+    const level3Layer = new VectorLayer({ source: level3Source, style: f => styleDt(f) });
+
     const view = new OlView({center, zoom: zoom});
     const raster = new OlLayerTile({
       source: new OlSourceOSM()
@@ -155,7 +185,9 @@ const Map = ({height,width,logged}) => {
         raster,
         boundaryLayer,
         drawVector,
-        level1Layer
+        level1Layer,
+        level2Layer,
+        level3Layer
       ],
       controls: [
         new Zoom({
